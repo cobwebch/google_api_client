@@ -54,6 +54,7 @@ class GoogleDocumentService implements SingletonInterface
 
     /**
      * @param DocumentConfiguration|null $documentConfiguration
+     * @return string
      */
     public function create(DocumentConfiguration $documentConfiguration = null)
     {
@@ -83,6 +84,7 @@ class GoogleDocumentService implements SingletonInterface
         }
 
         $this->changeAllPermissionsForFile($file->getId(), self::ROLE_WRITER);
+        return $file->getId();
     }
 
     /**

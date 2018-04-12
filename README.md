@@ -29,6 +29,8 @@ Installation
     -   The group "secretary" is considered as admin
 
     -   The group "reviewer" is only allowed to create comments
+    
+-   `composer require google/apiclient`
 
 Configure Google Project
 ------------------------
