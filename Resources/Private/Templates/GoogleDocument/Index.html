@@ -1,0 +1,310 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+      xmlns:google="http://typo3.org/ns/Cobweb/GoogleApiClient/ViewHelpers"
+      data-namespace-typo3-fluid="true">
+<f:layout name="Default"/>
+
+<f:section name="main">
+
+    <script>
+		// window.addEventListener("load", function(){
+		// 	// Clicking on "login required" should open the login box
+		//    $('.btn-login-required').click(function(e) {
+		//    	e.preventDefault();
+		//        $('#gichd-login-button').click();
+		//     });
+		// });
+    </script>
+
+
+    <f:if condition="{isAuthenticated}">
+        <f:then>
+            <p>
+                Hi
+                <strong>
+
+                    <f:if condition="{isAdmin}">
+                        Admin
+                    </f:if>
+
+                    <f:if condition="{isReviwer}">
+                        Reviewer
+                    </f:if>
+                </strong>
+            </p>
+
+            <p>
+                You are currently logged in as a {userData.username}. <br/>
+            </p>
+
+            <!-- REVIEWERS-->
+            <f:if condition="{isAdmin}">
+                <hr>
+                <h2>Reviewers</h2>
+
+                <p>Here is the list of your Reviewers</p>
+
+                <table class="table">
+
+                    <f:for each="{reviewers}" as="reviewer">
+                        <tr>
+                            <td style="text-align: left">
+                                {reviewer.username}
+                            </td>
+                            <td>
+                                <f:link.action action="changeAllForUser"
+                                               controller="GooglePermission"
+                                               arguments="{emailAddress: reviewer.connected_google_email, role: 'writer'}"
+                                               class="btn btn-default btn-sm">
+                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                    All files as "writer"
+                                </f:link.action>
+                                <f:link.action action="changeAllForUser"
+                                               controller="GooglePermission"
+                                               arguments="{emailAddress: reviewer.connected_google_email, role: 'commenter'}"
+                                               class="btn btn-default btn-sm">
+                                    <i class="fa fa-comment-o" aria-hidden="true"></i>
+                                    All files as "commenter"
+                                </f:link.action>
+                                <f:link.action action="changeAllForUser"
+                                               controller="GooglePermission"
+                                               arguments="{emailAddress: reviewer.connected_google_email, role: 'reader'}"
+                                               class="btn btn-default btn-sm">
+                                    <i class="fa fa-eye" aria-hidden="true"></i>
+                                    All files as "reader"
+                                </f:link.action>
+                                <f:link.action action="removeAllForUser"
+                                               controller="GooglePermission"
+                                               arguments="{emailAddress: reviewer.connected_google_email}"
+                                               class="btn btn-default btn-sm">
+                                    <i class="fa fa-user-o" aria-hidden="true"></i>
+                                    Remove all permissions
+                                </f:link.action>
+                                <br/>
+                                <f:if condition="{reviewer.google_permission_id} == ''">
+                                    <div class="alert alert-danger" role="alert">
+                                        This user has no permission. Please define at least one.
+                                    </div>
+                                </f:if>
+                            </td>
+                        </tr>
+                    </f:for>
+                </table>
+            </f:if>
+
+            <!-- DOCUMENTS -->
+            <f:if condition="{isAdmin}">
+                <hr>
+                <h2>Documents</h2>
+
+
+                <f:if condition="{f:flashMessages()}">
+                    <!-- find a better way! -->
+                    <div class="alert alert-success" role="alert">
+                        <f:flashMessages/>
+                        Action success!
+                    </div>
+                </f:if>
+
+                <p>
+                    List of documents:
+                </p>
+                <f:if condition="{files}">
+                    <ul>
+                        <f:for each="{files}" as="file">
+                            <li>
+                                Title: <strong>{file.name}</strong>
+
+                                <f:if condition="{file.permissions}">
+                                    <f:link.action action="remove"
+                                                   controller="GoogleDocument"
+                                                   arguments="{file: file.id}"
+                                                   title="Delete document"
+                                                   class="btn btn-default btn-sm">
+                                        <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                    </f:link.action>
+                                    <br/>
+                                    <br/>
+                                    <f:link.action action="changeAllForFile"
+                                                   controller="GooglePermission"
+                                                   arguments="{file: file.id, role: 'writer'}"
+                                                   class="btn btn-default btn-sm">
+                                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                        All reviewers as "writer"
+                                    </f:link.action>
+                                    <f:link.action action="changeAllForFile"
+                                                   controller="GooglePermission"
+                                                   arguments="{file: file.id, role: 'commenter'}"
+                                                   class="btn btn-default btn-sm">
+                                        <i class="fa fa-comment-o" aria-hidden="true"></i>
+                                        All reviewers as "commenter"
+                                    </f:link.action>
+                                    <f:link.action action="changeAllForFile"
+                                                   controller="GooglePermission"
+                                                   arguments="{file: file.id, role: 'reader'}"
+                                                   class="btn btn-default btn-sm">
+                                        <i class="fa fa-eye" aria-hidden="true"></i>
+                                        All reviewers as "reader"
+                                    </f:link.action>
+                                    <f:link.action action="removeAllForFile"
+                                                   controller="GooglePermission"
+                                                   arguments="{file: file.id}"
+                                                   class="btn btn-default btn-sm">
+                                        <i class="fa fa-user-o" aria-hidden="true"></i>
+                                        Remove all reviewers
+                                    </f:link.action>
+                                    <f:link.action action="show"
+                                                   arguments="{file: file.id}"
+                                                   class="btn btn-default btn-sm">
+                                        <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                                        Open document
+                                    </f:link.action>
+
+                                    <br/>
+                                    <br/>
+                                    <br/>
+
+                                    <table class="table" style="width: 60%">
+                                        <tr>
+                                            <th style="border-bottom: 3px solid #c00a26; border-top: 0 solid #c00a26;"></th>
+                                            <th style="border-bottom: 3px solid #c00a26; border-top: 0 solid #c00a26;">
+                                                Writer
+                                            </th>
+                                            <th style="border-bottom: 3px solid #c00a26; border-top: 0 solid #c00a26;">
+                                                Commenter
+                                            </th>
+                                            <th style="border-bottom: 3px solid #c00a26; border-top: 0 solid #c00a26;">
+                                                Reader
+                                            </th>
+                                            <th style="border-bottom: 3px solid #c00a26; border-top: 0 solid #c00a26;"></th>
+                                        </tr>
+                                        <f:for each="{file.permissions}" as="permission">
+                                            <tr>
+                                                <td style="text-align: left">
+                                                    {permission.emailAddress}
+                                                    <f:if condition="{permission.role} == 'owner'">
+                                                        ({permission.role})
+                                                    </f:if>
+                                                </td>
+                                                <td>
+                                                    <!-- writer -->
+                                                    <f:if condition="{permission.role} == 'owner'">
+                                                        <f:then>
+                                                            <i class="fa fa-check" aria-hidden="true"></i>
+                                                        </f:then>
+                                                        <f:else>
+                                                            <f:if condition="{permission.role} == 'writer'">
+                                                                <f:then>
+                                                                    <i class="fa fa-check" aria-hidden="true"></i>
+                                                                </f:then>
+                                                                <f:else>
+                                                                    <f:link.action action="change"
+                                                                                   controller="GooglePermission"
+                                                                                   arguments="{file: file.id, emailAddress: permission.emailAddress, role: 'writer'}"
+                                                                                   title="Set reviewer as writer"
+                                                                                   class="btn btn-default btn-sm">
+                                                                        <i class="fa fa-pencil-square-o"
+                                                                           aria-hidden="true"></i>
+                                                                    </f:link.action>
+                                                                </f:else>
+                                                            </f:if>
+                                                        </f:else>
+                                                    </f:if>
+                                                </td>
+                                                <td>
+                                                    <!-- commenter -->
+                                                    <f:if condition="{permission.role} == 'owner'">
+                                                        <f:then>
+                                                            <i class="fa fa-check" aria-hidden="true"></i>
+                                                        </f:then>
+                                                        <f:else>
+
+                                                            <f:if condition="{permission.role} == 'commenter'">
+                                                                <f:then>
+                                                                    <i class="fa fa-check" aria-hidden="true"></i>
+                                                                </f:then>
+                                                                <f:else>
+                                                                    <f:link.action action="change"
+                                                                                   controller="GooglePermission"
+                                                                                   arguments="{file: file.id, emailAddress: permission.emailAddress, role: 'commenter'}"
+                                                                                   title="Set reviewer as commenter"
+                                                                                   class="btn btn-default btn-sm">
+                                                                        <i class="fa fa-comment-o"
+                                                                           aria-hidden="true"></i>
+                                                                    </f:link.action>
+                                                                </f:else>
+                                                            </f:if>
+
+                                                        </f:else>
+                                                    </f:if>
+                                                </td>
+                                                <td>
+                                                    <!-- reader -->
+                                                    <f:if condition="{permission.role} == 'owner'">
+                                                        <f:then>
+                                                            <i class="fa fa-check" aria-hidden="true"></i>
+                                                        </f:then>
+                                                        <f:else>
+                                                            <f:if condition="{permission.role} == 'reader'">
+                                                                <f:then>
+                                                                    <i class="fa fa-check" aria-hidden="true"></i>
+                                                                </f:then>
+                                                                <f:else>
+
+                                                                    <f:link.action action="change"
+                                                                                   controller="GooglePermission"
+                                                                                   arguments="{file: file.id, emailAddress: permission.emailAddress, role: 'reader'}"
+                                                                                   title="Set reviewer as reader"
+                                                                                   class="btn btn-default btn-sm">
+                                                                        <i class="fa fa-eye" aria-hidden="true"></i>
+                                                                    </f:link.action>
+
+                                                                </f:else>
+                                                            </f:if>
+
+                                                        </f:else>
+                                                    </f:if>
+                                                </td>
+                                                <td>
+                                                    <!-- remove permission -->
+                                                    <f:if condition="{permission.role} != 'owner'">
+                                                        <f:link.action action="remove"
+                                                                       controller="GooglePermission"
+                                                                       arguments="{file: file.id, emailAddress: permission.emailAddress}"
+                                                                       title="Remove permission"
+                                                                       class="btn btn-default btn-sm">
+                                                            <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                                        </f:link.action>
+                                                    </f:if>
+                                                </td>
+                                            </tr>
+                                        </f:for>
+                                    </table>
+                                </f:if>
+                                <hr/>
+
+                            </li>
+                        </f:for>
+                    </ul>
+                </f:if>
+                <f:link.action action="create" class="btn btn-default">Create a new document</f:link.action>
+            </f:if>
+        </f:then>
+        <f:else>
+            <div class="alert alert-danger">
+                You are currently not authenticated. This is required to
+                continue. Please login-in somewhere...
+            </div>
+        </f:else>
+    </f:if>
+
+    <hr>
+    <h2>Documentation</h2>
+    <p style="margin-top: 10px">
+
+        Check the
+        <a href="/typo3conf/ext/google_api_client/README.md">README</a>
+        extension for the Google Demo accounts.
+    </p>
+
+</f:section>
+</html>

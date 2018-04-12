@@ -1,0 +1,18 @@
+plugin.tx_googleapiclient {
+    view {
+        templateRootPaths.0 = EXT:google_api_client/Resources/Private/Templates/
+        templateRootPaths.1 = {$plugin.tx_googleapiclient_course.view.templateRootPath}
+        partialRootPaths.0 = EXT:google_api_client/Resources/Private/Partials/
+        partialRootPaths.1 = {$plugin.tx_googleapiclient_course.view.partialRootPath}
+        layoutRootPaths.0 = EXT:google_api_client/Resources/Private/Layouts/
+        layoutRootPaths.1 = {$plugin.tx_googleapiclient_course.view.layoutRootPath}
+    }
+
+    settings {
+        apiKey = 0E5F4573-55F1-4A26-B965-3F1A7C48F6F3
+        source = gichd
+    }
+}
+
+plugin.tx_googleapiclient_user < plugin.tx_googleapiclient
+plugin.tx_googleapiclient_course < plugin.tx_googleapiclient

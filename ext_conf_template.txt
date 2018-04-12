@@ -1,0 +1,11 @@
+# cat=google_api_client/enable/; type=int; label=LLL:EXT:google_api_client/Resources/Private/Language/Backend.xlf:admin_user_group
+admin_user_group =
+
+# cat=google_api_client/enable/; type=int; label=LLL:EXT:google_api_client/Resources/Private/Language/Backend.xlf:reviewer_user_group
+reviewer_user_group =
+
+# cat=google_api_client/enable/; type=string; label=LLL:EXT:google_api_client/Resources/Private/Language/Backend.xlf:secret_google_api_client_authentication_file
+secret_google_api_client_authentication_file = .secret/client_id.json
+
+# cat=google_api_client/enable/; type=boolean; label=LLL:EXT:google_api_client/Resources/Private/Language/Backend.xlf:activate_plugin
+activate_plugin = 1

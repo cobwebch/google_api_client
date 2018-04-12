@@ -1,0 +1,15 @@
+{
+	"name": "cobweb/google-api-client",
+	"type": "typo3-cms-extension",
+	"description": "Google API client",
+	"homepage": "https://github.com/cobwebch/google_api_client",
+	"license": ["GPL-2.0+"],
+	"autoload": {
+		"psr-4": {
+			"Cobweb\\GoogleApiClient\\": "Classes/"
+		}
+	},
+	"support": {
+		"issues": "https://github.com/cobwebch/google_api_client/issues"
+	}
+}

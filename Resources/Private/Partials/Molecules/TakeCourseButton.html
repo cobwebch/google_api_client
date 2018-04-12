@@ -1,0 +1,43 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+      xmlns:litmos="http://typo3.org/ns/Cobweb/GoogleApiClient/ViewHelpers"
+      data-namespace-typo3-fluid="true">
+
+<f:if condition="{litmos:user.isAuthenticate()}">
+    <f:then>
+
+        <f:if condition="{course.AssignedDate}">
+            <f:then>
+                <f:if condition="{course.Complete}">
+                    <f:then>
+                        Complete
+                    </f:then>
+                    <f:else>
+                        <f:link.action action="take"
+                                       arguments="{course: course.OriginalId}"
+                                       class="training-button training-button-pencil btn"
+                                       style="padding: 22px 24px 0 118px">
+                            Continue
+                            <br/>
+                            <span id="deadline" class="last">({course.PercentageComplete}% completed)</span>
+                        </f:link.action>
+                    </f:else>
+                </f:if>
+            </f:then>
+            <f:else>
+                <f:link.action action="take"
+                               arguments="{course: course.OriginalId}"
+                               class="training-button training-button-pencil btn"
+                               style="padding: 32px 24px 0 118px">
+                    Take the course!
+                </f:link.action>
+            </f:else>
+        </f:if>
+    </f:then>
+    <f:else>
+        <a href="#"
+           class="btn-login-required">
+            Login required to take the course
+        </a>
+    </f:else>
+
+</f:if>

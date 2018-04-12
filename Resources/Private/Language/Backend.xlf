@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.0">
+    <file source-language="en" datatype="plaintext" original="messages" date="" product-name="local lang module">
+        <header/>
+        <body>
+            <trans-unit id="admin_user_group">
+                <source>Frontend User group considered as owner on Google Drive</source>
+            </trans-unit>
+            <trans-unit id="reviewer_user_group">
+                <source>Frontend User group considered as reviewer on Google Drive</source>
+            </trans-unit>
+            <trans-unit id="secret_google_api_client_authentication_file">
+                <source>Secret Google API Client authentication file. Please make this file is really secret and is not be exposed by the web server.</source>
+            </trans-unit>
+            <trans-unit id="secret_google_api_client_authentication_file">
+                <source>Secret Google API Client authentication file. Please make this file is really secret and is not be exposed by the web server.</source>
+            </trans-unit>
+            <trans-unit id="activate_plugin">
+                <source>Load the demo plugin for testing purposes</source>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>
