@@ -216,7 +216,11 @@ class GoogleDocumentService implements SingletonInterface
     public function changeAllPermissionsForFile($fileId, $role)
     {
         $this->validateRole($role);
-        $users = $this->getTypo3UserService()->getReviewerUsers();
+        $reviewerUsers = $this->getTypo3UserService()->getReviewerUsers();
+        $adminUsers = $this->getTypo3UserService()->getAdminUsers();
+
+        $users = array_merge($reviewerUsers, $adminUsers);
+
         foreach ($users as $user) {
             $this->changePermissionForUser($user, $fileId, $role);
         }
