@@ -9,6 +9,7 @@ namespace Cobweb\GoogleApiClient\Service;
  * LICENSE.md file that was distributed with this source code.
  */
 
+use Google_Service_Plus;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\HttpUtility;
@@ -44,7 +45,8 @@ class GoogleDriveService implements SingletonInterface
                 \Google_Service_Drive::DRIVE,
                 \Google_Service_Drive::DRIVE_APPDATA,
                 \Google_Service_Drive::DRIVE_METADATA,
-                \Google_Service_Drive::DRIVE_FILE
+                \Google_Service_Drive::DRIVE_FILE,
+                \Google_Service_Oauth2::USERINFO_EMAIL
             ]);
 
             # See if this is necessary
@@ -70,6 +72,21 @@ class GoogleDriveService implements SingletonInterface
             if (GeneralUtility::_GP('code')) {
                 $this->client->fetchAccessTokenWithAuthCode(GeneralUtility::_GP('code'));
                 $accessToken = $this->client->getAccessToken();
+
+                $plus = new Google_Service_Plus($this->client);
+                $googleEmails = $plus->people
+                    ->get('me')
+                    ->getEmails();
+
+                // Check that the current Google account corresponds to the email address defines in the FE User.
+                $isValid = $this->getTypo3SecurityService()->isGoogleAccountEmailValid($googleEmails);
+                if (!$isValid) {
+                    // hard redirect to the 404 page
+                    // todo make me configurable!!
+                    $url = $this->getContentObject()->typoLink_URL(['parameter' => 69]);
+                    HttpUtility::redirect($url);
+                }
+
                 if ($accessToken) {
                     $this->getGoogleCredentialsService()->writeCredentials($this->client->getAccessToken());
                 }
@@ -167,6 +184,14 @@ class GoogleDriveService implements SingletonInterface
     protected function getGoogleCredentialsService()
     {
         return GeneralUtility::makeInstance(GoogleCredentialsService::class);
+    }
+
+    /**
+     * @return Typo3SecurityService|object
+     */
+    protected function getTypo3SecurityService(): Typo3SecurityService
+    {
+        return GeneralUtility::makeInstance(Typo3SecurityService::class);
     }
 
 }

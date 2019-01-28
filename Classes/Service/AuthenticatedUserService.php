@@ -24,7 +24,7 @@ class AuthenticatedUserService implements SingletonInterface
     /**
      * Gets a singleton instance of this class.
      *
-     * @return \Cobweb\Lima\Domain\Service\AuthenticatedUserService|object
+     * @return \Cobweb\GoogleApiClient\Service\AuthenticatedUserService|object
      */
     static public function getInstance()
     {

@@ -220,5 +220,4 @@ class Typo3UserService implements SingletonInterface
         return GeneralUtility::makeInstance(GoogleDocumentService::class);
     }
 
-
 }
