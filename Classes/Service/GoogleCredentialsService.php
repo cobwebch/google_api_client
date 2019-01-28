@@ -25,7 +25,10 @@ class GoogleCredentialsService implements SingletonInterface
      */
     public function writeCredentials(array $credentials)
     {
-        GeneralUtility::writeFileToTypo3tempDir($this->getCredentialsFile(), json_encode($credentials));
+        $result = file_put_contents($this->getCredentialsFile(), json_encode($credentials));
+        if (!$result) {
+            throw new \RuntimeException('I could not write file ' . $this->getCredentialsFile());
+        }
     }
 
     /**
