@@ -11,6 +11,8 @@ namespace Cobweb\GoogleApiClient\Service;
 
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Extensionmanager\Utility\ConfigurationUtility;
 
 /**
  * Class GoogleCredentialsService
@@ -70,13 +72,37 @@ class GoogleCredentialsService implements SingletonInterface
      */
     protected function getCredentialsDirectory()
     {
-        $credentialsDirectoryName = 'google_api_credentials';
         // Create language file dynamically
-        $credentialsDirectory = PATH_site . 'typo3temp/' . $credentialsDirectoryName;
+        $credentialsDirectory = dirname(PATH_site . $this->getExtensionConfiguration()['secret_google_api_client_authentication_file']['value']);
+
         if (!is_dir($credentialsDirectory)) {
             GeneralUtility::mkdir($credentialsDirectory);
         }
         return $credentialsDirectory;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getExtensionConfiguration()
+    {
+        return $this->getConfigurationUtility()->getCurrentConfiguration('google_api_client');
+    }
+
+    /**
+     * @return object|ConfigurationUtility
+     */
+    protected function getConfigurationUtility()
+    {
+        return $this->getObjectManager()->get(ConfigurationUtility::class);
+    }
+
+    /**
+     * @return object|ObjectManager
+     */
+    protected function getObjectManager()
+    {
+        return GeneralUtility::makeInstance(ObjectManager::class);
     }
 
     /**
