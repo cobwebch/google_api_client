@@ -73,8 +73,9 @@ class GoogleCredentialsService implements SingletonInterface
     protected function getCredentialsDirectory()
     {
         // Create language file dynamically
-        $credentialsDirectory = dirname(PATH_site . $this->getExtensionConfiguration()['secret_google_api_client_authentication_file']['value']);
-
+        $credentialsDirectory = realpath(
+            dirname(PATH_site . $this->getExtensionConfiguration()['secret_google_api_client_authentication_file']['value'])
+        );
         if (!is_dir($credentialsDirectory)) {
             GeneralUtility::mkdir($credentialsDirectory);
         }
