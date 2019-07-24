@@ -42,7 +42,7 @@ class Typo3UserService implements SingletonInterface
     protected function getUsers($groupIdentifier = 0)
     {
         $clause = $groupIdentifier > 0
-            ? sprintf('FIND_IN_SET(%s, usergroup) ', $groupIdentifier)
+            ? sprintf('FIND_IN_SET(%s, usergroup)', $groupIdentifier)
             : '1 = 1 ';
 
         // Always exclude current user from the query. We never want to set permissions for ourselves, since we already have
@@ -65,7 +65,7 @@ class Typo3UserService implements SingletonInterface
     {
         $clause = $emailAddress
             ? sprintf(
-                '(FIND_IN_SET(usergroup, %s) OR FIND_IN_SET(usergroup, %s)) AND connected_google_email = "%s"',
+                '(FIND_IN_SET(%s, usergroup) OR FIND_IN_SET(%s, usergroup)) AND connected_google_email = "%s"',
                 $reviewerUserGroupIdentifier = $this->getExtensionConfiguration()->get('reviewer_user_group'),
                 $adminUserGroupIdentifier = $this->getExtensionConfiguration()->get('admin_user_group'),
                 $emailAddress
@@ -87,7 +87,7 @@ class Typo3UserService implements SingletonInterface
     {
         $clause = (int)$uid > 0
             ? sprintf(
-                '(FIND_IN_SET(usergroup, %s)) AND uid = %s',
+                '(FIND_IN_SET(%s, usergroup)) AND uid = %s',
                 $reviewerUserGroupIdentifier = $this->getExtensionConfiguration()->get('reviewer_user_group'),
                 #$adminUserGroupIdentifier = $this->getExtensionConfiguration()->get('admin_user_group'),
                 (int)$uid
