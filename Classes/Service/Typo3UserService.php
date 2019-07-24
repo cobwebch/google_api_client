@@ -42,7 +42,7 @@ class Typo3UserService implements SingletonInterface
     protected function getUsers($groupIdentifier = 0)
     {
         $clause = $groupIdentifier > 0
-            ? sprintf('FIND_IN_SET(usergroup, %s) ', $groupIdentifier)
+            ? sprintf('FIND_IN_SET(%s, usergroup) ', $groupIdentifier)
             : '1 = 1 ';
 
         // Always exclude current user from the query. We never want to set permissions for ourselves, since we already have
