@@ -39,7 +39,7 @@ class Typo3UserService implements SingletonInterface
      * @param int $groupIdentifier
      * @return array
      */
-    protected function getUsers($groupIdentifier = 0)
+    public function getUsers($groupIdentifier = 0)
     {
         $clause = $groupIdentifier > 0
             ? sprintf('FIND_IN_SET(%s, usergroup)', $groupIdentifier)
