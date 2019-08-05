@@ -45,10 +45,12 @@ class Typo3UserService implements SingletonInterface
             ? sprintf('FIND_IN_SET(%s, usergroup)', $groupIdentifier)
             : '1 = 1 ';
 
+        $clause .= ' AND connected_google_email != "" ';
+
         // Always exclude current user from the query. We never want to set permissions for ourselves, since we already have
         // ownership on files
         if (!empty($GLOBALS['TSFE']->fe_user->user['uid'])) {
-            $clause .= ' AND connected_google_email != "" AND uid != ' . (int)$GLOBALS['TSFE']->fe_user->user['uid'];
+            $clause .= ' AND uid != ' . (int)$GLOBALS['TSFE']->fe_user->user['uid'];
         }
 
         $clause .= $this->getClauseForEnabledFields();
