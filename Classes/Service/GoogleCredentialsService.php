@@ -86,6 +86,25 @@ class GoogleCredentialsService implements SingletonInterface
     }
 
     /**
+     * Clean token files older than 10 days
+     */
+    public function cleanOldTokenFiles() {
+        $tokenFolder = $this->getCredentialsDirectory()."/.fe_user_*";
+
+        /************** RPR DEBUG *************/
+        $files = glob($tokenFolder);
+        $now   = time();
+
+        foreach ($files as $file) {
+            if (is_file($file) && !strpos($file,'client_id.json')) {
+                if ($now - filemtime($file) >= 60 * 60 * 24 * 2) { // 2 days
+                    unlink($file);
+                }
+            }
+        }
+    }
+
+    /**
      * @return array
      */
     protected function getExtensionConfiguration()
