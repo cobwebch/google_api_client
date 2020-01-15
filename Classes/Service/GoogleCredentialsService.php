@@ -20,6 +20,11 @@ use TYPO3\CMS\Extensionmanager\Utility\ConfigurationUtility;
 class GoogleCredentialsService implements SingletonInterface
 {
 
+    public function __construct()
+    {
+        $this->cleanOldTokenFiles();
+    }
+
     /**
      * @param array $credentials
      */
